@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Positive Debriefing Lens</title>
+  <style>
+    :root {
+      --bg: #f8f4ed;
+      --panel: #fffdf8;
+      --ink: #22302d;
+      --muted: #63716d;
+      --accent: #2f7d73;
+      --accent-dark: #20584f;
+      --accent-soft: #dff1ed;
+      --gold: #c58b2b;
+      --rose: #f4ded7;
+      --warning: #8a4b12;
+      --warning-bg: #fff0d9;
+      --border: #e5ddd1;
+      --shadow: 0 18px 40px rgba(58, 45, 30, 0.12);
+      --radius: 20px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(47,125,115,0.14), transparent 35%),
+        radial-gradient(circle at top right, rgba(197,139,43,0.14), transparent 32%),
+        var(--bg);
+      min-height: 100vh;
+    }
+
+    header {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 42px 22px 18px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.5fr 0.9fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .hero-card, .framework-card, .panel {
+      background: rgba(255,253,248,0.88);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card { padding: 34px; }
+    .framework-card { padding: 24px; }
+
+    .eyebrow {
+      color: var(--accent-dark);
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-size: 0.76rem;
+    }
+
+    h1 {
+      margin: 10px 0 12px;
+      font-size: clamp(2rem, 5vw, 4.2rem);
+      line-height: 0.96;
+      letter-spacing: -0.06em;
+    }
+
+    h2, h3 { margin: 0; }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .hero-card p { font-size: 1.05rem; max-width: 820px; }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+      font-weight: 700;
+      font-size: 0.86rem;
+    }
+
+    .framework-card h2 {
+      font-size: 1.05rem;
+      margin-bottom: 12px;
+    }
+
+    .revamp-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 9px;
+      margin-top: 15px;
+    }
+
+    .revamp-item {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 10px;
+      font-size: 0.84rem;
+      font-weight: 800;
+      color: var(--accent-dark);
+    }
+
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 16px 22px 48px;
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .panel { padding: 24px; }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .section-title h2 { font-size: 1.25rem; }
+
+    label {
+      display: block;
+      font-weight: 800;
+      margin: 14px 0 8px;
+      color: #2d3c39;
+    }
+
+    textarea, select, input[type="file"] {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 14px;
+      color: var(--ink);
+      padding: 13px 14px;
+      font: inherit;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    textarea {
+      min-height: 210px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    textarea:focus, select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(47,125,115,0.13);
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .sample-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      font: inherit;
+      border-radius: 999px;
+      font-weight: 800;
+      transition: transform .15s, box-shadow .15s, background .15s;
+    }
+
+    button:hover { transform: translateY(-1px); }
+    button:active { transform: translateY(0); }
+
+    .sample {
+      background: #fff;
+      border: 1px solid var(--border);
+      color: var(--accent-dark);
+      padding: 8px 11px;
+      font-size: .85rem;
+    }
+
+    .primary {
+      width: 100%;
+      margin-top: 18px;
+      padding: 15px 18px;
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 12px 24px rgba(47,125,115,0.25);
+      font-size: 1rem;
+    }
+
+    .secondary {
+      padding: 8px 12px;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+      font-size: .85rem;
+    }
+
+    .audio-box {
+      background: #fbf7ef;
+      border: 1px dashed #d5c7b2;
+      border-radius: 16px;
+      padding: 14px;
+      margin-top: 12px;
+    }
+
+    .audio-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .mic {
+      padding: 10px 14px;
+      background: #314743;
+      color: white;
+    }
+
+    .mic.recording {
+      background: #9c3f2d;
+      animation: pulse 1.2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(156,63,45,0.28); }
+      100% { box-shadow: 0 0 0 12px rgba(156,63,45,0); }
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 16px;
+      padding: 13px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+    }
+
+    .switch {
+      position: relative;
+      width: 54px;
+      height: 30px;
+      flex: 0 0 auto;
+    }
+
+    .switch input { opacity: 0; width: 0; height: 0; }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background: #cfc6b8;
+      border-radius: 999px;
+      transition: .25s;
+    }
+
+    .slider:before {
+      content: "";
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      left: 4px;
+      top: 4px;
+      background: white;
+      border-radius: 50%;
+      transition: .25s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+
+    input:checked + .slider { background: var(--accent); }
+    input:checked + .slider:before { transform: translateX(24px); }
+
+    .output-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      min-height: 138px;
+      white-space: pre-wrap;
+      line-height: 1.55;
+    }
+
+    .output-card.empty {
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .meta-card {
+      background: #fbf7ef;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
+    }
+
+    .meta-card h3 {
+      font-size: .94rem;
+      margin-bottom: 8px;
+      color: var(--accent-dark);
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .tag {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 9px;
+      color: #33413e;
+      font-size: .8rem;
+      font-weight: 700;
+    }
+
+    .explanation, .warning {
+      margin-top: 14px;
+      border-radius: 16px;
+      padding: 14px;
+      line-height: 1.55;
+    }
+
+    .explanation {
+      background: var(--accent-soft);
+      color: #244642;
+      border: 1px solid #c8e4de;
+    }
+
+    .warning {
+      background: var(--warning-bg);
+      color: var(--warning);
+      border: 1px solid #f2d19a;
+    }
+
+    .hidden { display: none; }
+
+    .footer-note {
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: .86rem;
+    }
+
+    @media (max-width: 900px) {
+      .hero, .app-grid, .controls-grid, .meta-grid { grid-template-columns: 1fr; }
+      .hero-card { padding: 26px; }
+      header { padding-top: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="hero">
+      <section class="hero-card">
+        <div class="eyebrow">Healthcare simulation educator tool</div>
+        <h1>Positive Debriefing Lens</h1>
+        <p>Transform debriefing questions, feedback, pre-brief scripts, and follow-up language into psychologically safe, growth-oriented prompts grounded in REVAMP and positive psychology interventions.</p>
+        <div class="pill-row">
+          <span class="pill">Avoids toxic positivity</span>
+          <span class="pill">Preserves accountability</span>
+          <span class="pill">Supports PEARLS-style inquiry</span>
+          <span class="pill">Works offline</span>
+        </div>
+      </section>
+      <aside class="framework-card">
+        <h2>REVAMP domains</h2>
+        <p>Use the transformation goal to emphasize specific well-being domains.</p>
+        <div class="revamp-grid">
+          <div class="revamp-item">Relationships</div>
+          <div class="revamp-item">Engagement</div>
+          <div class="revamp-item">Vitality</div>
+          <div class="revamp-item">Accomplishments</div>
+          <div class="revamp-item">Meaning</div>
+          <div class="revamp-item">Positive Emotions</div>
+        </div>
+      </aside>
+    </div>
+  </header>
+
+  <main>
+    <div class="app-grid">
+      <section class="panel">
+        <div class="section-title">
+          <h2>Input</h2>
+          <button class="secondary" id="copyOriginal">Copy original</button>
+        </div>
+
+        <label for="inputText">Original debriefing language</label>
+        <textarea id="inputText" placeholder="Paste or type a debriefing question, facilitator comment, pre-brief script, or post-session message..."></textarea>
+
+        <label>Starter examples</label>
+        <div class="sample-buttons" id="sampleButtons"></div>
+
+        <div class="audio-box">
+          <label for="audioUpload">Optional audio upload or speech-to-text</label>
+          <input id="audioUpload" type="file" accept="audio/*" />
+          <p class="footer-note" id="audioFileNote">Audio files can be attached for workflow realism. This offline prototype does not transcribe uploaded files without a speech/LLM API.</p>
+          <div class="audio-actions">
+            <button class="mic" id="micButton">Start speech-to-text</button>
+            <button class="sample" id="clearButton">Clear</button>
+          </div>
+          <p class="footer-note" id="speechStatus">Speech recognition status will appear here.</p>
+        </div>
+
+        <div class="controls-grid">
+          <div>
+            <label for="contentType">Content type</label>
+            <select id="contentType">
+              <option>Debriefing question</option>
+              <option>Facilitator feedback</option>
+              <option>Pre-brief script</option>
+              <option>Reactions phase prompt</option>
+              <option>Analysis phase inquiry</option>
+              <option>Summary/takeaway prompt</option>
+              <option>Post-session email</option>
+            </select>
+          </div>
+          <div>
+            <label for="goal">Transformation goal</label>
+            <select id="goal">
+              <option>Balanced positive psychology reframe</option>
+              <option>REVAMP-focused</option>
+              <option>PPI-focused</option>
+              <option>Strengths-based inquiry</option>
+              <option>Meaning and values reflection</option>
+              <option>Gratitude/relationships</option>
+              <option>Growth mindset/self-compassion</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="toggle-row">
+          <div>
+            <strong>Show explanation of changes</strong>
+            <p>Names REVAMP domains, PPIs, and rationale.</p>
+          </div>
+          <label class="switch" aria-label="Show explanation of changes">
+            <input type="checkbox" id="showExplanation" checked />
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <button class="primary" id="transformButton">Transform</button>
+      </section>
+
+      <section class="panel">
+        <div class="section-title">
+          <h2>Positive psychology version</h2>
+          <button class="secondary" id="copyRevised">Copy revised</button>
+        </div>
+
+        <div id="output" class="output-card empty">Your transformed text will appear here.</div>
+
+        <div class="meta-grid">
+          <div class="meta-card">
+            <h3>REVAMP domains applied</h3>
+            <div class="tag-list" id="revampTags"><span class="tag">Awaiting input</span></div>
+          </div>
+          <div class="meta-card">
+            <h3>PPIs used</h3>
+            <div class="tag-list" id="ppiTags"><span class="tag">Awaiting input</span></div>
+          </div>
+        </div>
+
+        <div id="warning" class="warning hidden"></div>
+        <div id="explanation" class="explanation hidden"></div>
+
+        <p class="footer-note">Prototype note: This rule-based tool can later be connected to an LLM API for richer contextual rewriting. It currently runs entirely in the browser.</p>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const samples = [
+      "What went wrong during the code?",
+      "Why didn’t the team leader assign roles sooner?",
+      "The communication was poor.",
+      "You missed the deterioration.",
+      "What should we do differently next time?"
+    ];
+
+    const ppiLibrary = {
+      gratitude: {
+        label: "Gratitude",
+        domains: ["Relationships", "Positive Emotions"],
+        prompt: "What is one thing you appreciated about how the team supported patient care or each other?"
+      },
+      strengths: {
+        label: "Signature strengths",
+        domains: ["Accomplishments", "Relationships"],
+        prompt: "What strengths did you notice in yourself or another teammate during this moment?"
+      },
+      savoring: {
+        label: "Savoring / positive recall",
+        domains: ["Positive Emotions", "Engagement"],
+        prompt: "Where did the team create a moment worth carrying forward into the next clinical shift?"
+      },
+      mindfulness: {
+        label: "Mindfulness",
+        domains: ["Vitality", "Engagement"],
+        prompt: "Before we analyze the case, what are you noticing in your body or attention right now, without judgment?"
+      },
+      meaning: {
+        label: "Meaning / values reflection",
+        domains: ["Meaning", "Engagement"],
+        prompt: "How does this case connect to the kind of care we hope to provide for patients and families?"
+      },
+      selfCompassion: {
+        label: "Self-compassion",
+        domains: ["Vitality", "Accomplishments"],
+        prompt: "How might we speak about this learning moment if we were supporting a respected colleague or friend?"
+      },
+      bestSelf: {
+        label: "Best possible self visualization",
+        domains: ["Meaning", "Accomplishments"],
+        prompt: "If this team performed this case at its best next time, what would we see, hear, and feel?"
+      },
+      kindness: {
+        label: "Acts of kindness",
+        domains: ["Relationships", "Positive Emotions"],
+        prompt: "What is one small action we could take to make it easier for teammates to succeed next time?"
+      }
+    };
+
+    const phraseRules = [
+      {
+        pattern: /what\s+went\s+wrong\??/i,
+        replacement: "What did we notice, what worked well, and where is there an opportunity to improve?",
+        domains: ["Accomplishments", "Engagement"],
+        ppis: ["savoring", "strengths"],
+        reason: "Balanced deficit language with learning from success and improvement."
+      },
+      {
+        pattern: /why\s+didn[’']?t\s+you\s+([^?\.]+)[?\.]?/i,
+        replacement: "What factors shaped your decision about $1, and what would support success next time?",
+        domains: ["Engagement", "Vitality"],
+        ppis: ["selfCompassion"],
+        reason: "Changed a potentially blaming 'why didn't you' question into curious advocacy-inquiry."
+      },
+      {
+        pattern: /why\s+didn[’']?t\s+the\s+team\s+leader\s+([^?\.]+)[?\.]?/i,
+        replacement: "What factors shaped the team leader’s choices around $1, and what supports could help the team make that happen earlier next time?",
+        domains: ["Relationships", "Engagement", "Accomplishments"],
+        ppis: ["strengths", "selfCompassion"],
+        reason: "Shifted from individual blame to team context, supports, and future action."
+      },
+      {
+        pattern: /you\s+failed\s+to\s+([^?\.]+)[?\.]?/i,
+        replacement: "What made it challenging to $1, what did the team do that helped, and what could support success next time?",
+        domains: ["Vitality", "Accomplishments"],
+        ppis: ["selfCompassion", "strengths"],
+        reason: "Reframed failure language into challenge, support, and growth."
+      },
+      {
+        pattern: /what\s+mistakes\s+did\s+you\s+make\??/i,
+        replacement: "What are we learning from this case, including both effective actions and opportunities for growth?",
+        domains: ["Accomplishments", "Meaning"],
+        ppis: ["savoring", "meaning"],
+        reason: "Kept accountability while reducing shame and broadening to what went right."
+      },
+      {
+        pattern: /that\s+was\s+chaotic\.?/i,
+        replacement: "There was a lot happening at once. What helped the team adapt, and what would help create more clarity next time?",
+        domains: ["Vitality", "Relationships"],
+        ppis: ["strengths", "selfCompassion"],
+        reason: "Validated complexity while inviting adaptive learning."
+      },
+      {
+        pattern: /the\s+communication\s+was\s+poor\.?/i,
+        replacement: "Communication felt challenging at several moments. Where did communication support the team, and what specific behaviors would make coordination clearer next time?",
+        domains: ["Relationships", "Accomplishments"],
+        ppis: ["strengths", "savoring"],
+        reason: "Moved from global judgment to specific, actionable, team-centered reflection."
+      },
+      {
+        pattern: /you\s+missed\s+the\s+deterioration\.?/i,
+        replacement: "The patient’s deterioration was difficult to recognize in real time. What cues were available, what cues did the team notice, and what would help us detect this earlier next time?",
+        domains: ["Engagement", "Accomplishments", "Meaning"],
+        ppis: ["selfCompassion", "meaning"],
+        reason: "Preserved the patient-safety issue while reducing personal blame and focusing on cues and systems."
+      },
+      {
+        pattern: /what\s+should\s+we\s+do\s+differently\s+next\s+time\??/i,
+        replacement: "What should we carry forward because it worked well, and what is one change that would help us provide even better care next time?",
+        domains: ["Accomplishments", "Meaning", "Positive Emotions"],
+        ppis: ["savoring", "meaning"],
+        reason: "Added strengths and continuity to a traditional improvement question."
+      }
+    ];
+
+    const contentTemplates = {
+      "Pre-brief script": "Our goal today is to learn together in a way that honors both strengths and opportunities for growth. As we begin, notice what helps the team connect, focus, adapt, and provide excellent patient care.",
+      "Reactions phase prompt": "All reactions are welcome. After we name what felt hard, let’s also identify one moment where something worked smoothly or a teammate helped the team move forward.",
+      "Analysis phase inquiry": "Let’s examine the performance honestly and curiously: what cues, team behaviors, and system factors shaped what happened, and what strengths can we build on next time?",
+      "Summary/takeaway prompt": "As we close, what is one strength or effective behavior to carry forward, and one specific opportunity for growth that will improve care in the next patient encounter?",
+      "Post-session email": "Thank you for the time, energy, and expertise you brought to the simulation. We identified meaningful opportunities to improve our systems and also saw important team strengths worth carrying forward into clinical care."
+    };
+
+    const goalMap = {
+      "Balanced positive psychology reframe": { domains: ["Relationships", "Accomplishments", "Meaning"], ppis: ["strengths", "savoring", "meaning"] },
+      "REVAMP-focused": { domains: ["Relationships", "Engagement", "Vitality", "Accomplishments", "Meaning", "Positive Emotions"], ppis: ["strengths", "meaning"] },
+      "PPI-focused": { domains: ["Meaning", "Positive Emotions", "Relationships"], ppis: ["gratitude", "strengths", "mindfulness", "meaning"] },
+      "Strengths-based inquiry": { domains: ["Accomplishments", "Relationships"], ppis: ["strengths", "savoring"] },
+      "Meaning and values reflection": { domains: ["Meaning", "Engagement"], ppis: ["meaning", "bestSelf"] },
+      "Gratitude/relationships": { domains: ["Relationships", "Positive Emotions"], ppis: ["gratitude", "kindness"] },
+      "Growth mindset/self-compassion": { domains: ["Vitality", "Accomplishments"], ppis: ["selfCompassion", "bestSelf"] }
+    };
+
+    const inputText = document.getElementById("inputText");
+    const output = document.getElementById("output");
+    const explanation = document.getElementById("explanation");
+    const warning = document.getElementById("warning");
+    const revampTags = document.getElementById("revampTags");
+    const ppiTags = document.getElementById("ppiTags");
+    const speechStatus = document.getElementById("speechStatus");
+    const micButton = document.getElementById("micButton");
+    const sampleButtons = document.getElementById("sampleButtons");
+
+    samples.forEach(sample => {
+      const btn = document.createElement("button");
+      btn.className = "sample";
+      btn.textContent = sample;
+      btn.addEventListener("click", () => inputText.value = sample);
+      sampleButtons.appendChild(btn);
+    });
+
+    function unique(arr) { return [...new Set(arr)]; }
+
+    function renderTags(el, items) {
+      el.innerHTML = "";
+      unique(items).forEach(item => {
+        const tag = document.createElement("span");
+        tag.className = "tag";
+        tag.textContent = item;
+        el.appendChild(tag);
+      });
+    }
+
+    function detectWarnings(text, revised) {
+      const warnings = [];
+      if (/why didn|failed|mistake|poor|missed|wrong|bad|blame|fault/i.test(text)) {
+        warnings.push("Potential shame/blame language detected. The revision uses curiosity, context, and future-oriented supports while preserving accountability.");
+      }
+      if (/just be positive|only focus on positives|ignore|don.t worry|everything was fine/i.test(text)) {
+        warnings.push("Potential toxic positivity detected. The revision should acknowledge challenge and negative emotion rather than bypassing it.");
+      }
+      if (/unsafe|harm|near miss|deterioration|delay|medication error|wrong dose|shock|airway|code/i.test(text + " " + revised)) {
+        warnings.push("Patient-safety content detected. Keep the discussion honest and specific; positive psychology should support learning, not soften serious safety concerns.");
+      }
+      return warnings;
+    }
+
+    function applyRules(text) {
+      let revised = text.trim();
+      let domains = [];
+      let ppis = [];
+      let reasons = [];
+      let matched = false;
+
+      phraseRules.forEach(rule => {
+        if (rule.pattern.test(revised)) {
+          revised = revised.replace(rule.pattern, rule.replacement);
+          domains.push(...rule.domains);
+          ppis.push(...rule.ppis);
+          reasons.push(rule.reason);
+          matched = true;
+        }
+      });
+
+      return { revised, domains, ppis, reasons, matched };
+    }
+
+    function addGoalLens(revised, goal, contentType) {
+      const config = goalMap[goal] || goalMap["Balanced positive psychology reframe"];
+      const ppiPrompts = config.ppis.map(key => ppiLibrary[key]?.prompt).filter(Boolean);
+      let addition = "";
+
+      if (goal === "REVAMP-focused") {
+        addition = "\n\nREVAMP lens: What did we notice about relationships, engagement, vitality, accomplishments, meaning, and positive emotions during this scenario? Which of these can we intentionally strengthen next time?";
+      } else if (goal === "PPI-focused") {
+        addition = "\n\nPositive psychology prompt: " + ppiPrompts.slice(0, 2).join(" ");
+      } else if (goal === "Strengths-based inquiry") {
+        addition = "\n\nStrengths follow-up: What strengths did the team demonstrate, and how can we use those strengths in a new way during the next case?";
+      } else if (goal === "Meaning and values reflection") {
+        addition = "\n\nMeaning follow-up: How does this learning connect to the kind of care we want patients and families to experience?";
+      } else if (goal === "Gratitude/relationships") {
+        addition = "\n\nRelationship follow-up: What is one thing you appreciated about a teammate’s contribution, and what helped the team trust or support one another?";
+      } else if (goal === "Growth mindset/self-compassion") {
+        addition = "\n\nSelf-compassion follow-up: What made this hard, what can we learn from it, and how would we speak about this if we were supporting a respected colleague?";
+      }
+
+      if (["Pre-brief script", "Reactions phase prompt", "Analysis phase inquiry", "Summary/takeaway prompt", "Post-session email"].includes(contentType) && revised.length < 30) {
+        revised = contentTemplates[contentType];
+      }
+
+      return { revised: revised + addition, domains: config.domains, ppis: config.ppis };
+    }
+
+    function polishFallback(text, contentType) {
+      if (!text) return contentTemplates[contentType] || "What did we notice, what worked well, what felt challenging, and what is one specific opportunity for growth?";
+
+      if (/\?$/.test(text)) {
+        return text.replace(/\?$/, "") + ", and what strengths, system factors, or supports can help us learn from this next time?";
+      }
+
+      if (contentType === "Facilitator feedback") {
+        return "I noticed an important learning moment: " + text + " What helped the team in that moment, what made it challenging, and what would support success next time?";
+      }
+
+      return text + "\n\nPositive psychology lens: What worked well, what made this challenging, and what can we carry forward to improve patient care next time?";
+    }
+
+    function transform() {
+      const text = inputText.value.trim();
+      const contentType = document.getElementById("contentType").value;
+      const goal = document.getElementById("goal").value;
+      const showExplanation = document.getElementById("showExplanation").checked;
+
+      const ruleResult = applyRules(text);
+      let revised = ruleResult.matched ? ruleResult.revised : polishFallback(text, contentType);
+      const goalResult = addGoalLens(revised, goal, contentType);
+
+      const allDomains = unique([...ruleResult.domains, ...goalResult.domains]);
+      const allPpis = unique([...ruleResult.ppis, ...goalResult.ppis]);
+      const ppiLabels = allPpis.map(key => ppiLibrary[key]?.label || key);
+
+      output.textContent = goalResult.revised;
+      output.classList.remove("empty");
+      renderTags(revampTags, allDomains.length ? allDomains : ["Relationships", "Accomplishments", "Meaning"]);
+      renderTags(ppiTags, ppiLabels.length ? ppiLabels : ["Signature strengths", "Meaning / values reflection"]);
+
+      const warnings = detectWarnings(text, goalResult.revised);
+      if (warnings.length) {
+        warning.textContent = warnings.join(" ");
+        warning.classList.remove("hidden");
+      } else {
+        warning.classList.add("hidden");
+      }
+
+      if (showExplanation) {
+        const baseReason = ruleResult.reasons.length
+          ? ruleResult.reasons.join(" ")
+          : "No exact phrase rule was triggered, so the app used a general positive psychology template that keeps the original content while adding curiosity, strengths, and future-oriented learning.";
+        explanation.textContent = baseReason + " The revision applies " + (allDomains.join(", ") || "REVAMP") + " and uses " + (ppiLabels.join(", ") || "positive psychology interventions") + ". It is designed to acknowledge difficulty without blame, preserve patient-safety learning, and invite reflection on what worked, what was challenging, and what can improve.";
+        explanation.classList.remove("hidden");
+      } else {
+        explanation.classList.add("hidden");
+      }
+    }
+
+    document.getElementById("transformButton").addEventListener("click", transform);
+    document.getElementById("clearButton").addEventListener("click", () => {
+      inputText.value = "";
+      output.textContent = "Your transformed text will appear here.";
+      output.classList.add("empty");
+      explanation.classList.add("hidden");
+      warning.classList.add("hidden");
+      renderTags(revampTags, ["Awaiting input"]);
+      renderTags(ppiTags, ["Awaiting input"]);
+    });
+
+    function copyText(text, label) {
+      navigator.clipboard?.writeText(text).then(() => {
+        speechStatus.textContent = label + " copied to clipboard.";
+      }).catch(() => {
+        speechStatus.textContent = "Copy failed. You can manually select and copy the text.";
+      });
+    }
+
+    document.getElementById("copyOriginal").addEventListener("click", () => copyText(inputText.value, "Original text"));
+    document.getElementById("copyRevised").addEventListener("click", () => copyText(output.textContent, "Revised text"));
+
+    document.getElementById("audioUpload").addEventListener("change", event => {
+      const file = event.target.files[0];
+      if (file) {
+        document.getElementById("audioFileNote").textContent = "Attached: " + file.name + ". Uploaded audio is not transcribed in this offline prototype. Use speech-to-text or paste a transcript.";
+      }
+    });
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let recognition;
+    let isRecording = false;
+
+    if (SpeechRecognition) {
+      recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = "en-US";
+
+      recognition.onstart = () => {
+        isRecording = true;
+        micButton.textContent = "Stop speech-to-text";
+        micButton.classList.add("recording");
+        speechStatus.textContent = "Listening... speak clearly. Transcript will be appended to the text box.";
+      };
+
+      recognition.onresult = event => {
+        let interim = "";
+        let finalText = "";
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript;
+          if (event.results[i].isFinal) finalText += transcript + " ";
+          else interim += transcript;
+        }
+        if (finalText) inputText.value += (inputText.value ? " " : "") + finalText.trim();
+        speechStatus.textContent = interim ? "Hearing: " + interim : "Listening...";
+      };
+
+      recognition.onerror = event => {
+        speechStatus.textContent = "Speech recognition error: " + event.error + ". You can still enter text manually.";
+      };
+
+      recognition.onend = () => {
+        isRecording = false;
+        micButton.textContent = "Start speech-to-text";
+        micButton.classList.remove("recording");
+        if (!speechStatus.textContent.includes("error")) speechStatus.textContent = "Speech-to-text stopped.";
+      };
+
+      micButton.addEventListener("click", () => {
+        if (isRecording) recognition.stop();
+        else recognition.start();
+      });
+    } else {
+      micButton.disabled = true;
+      micButton.textContent = "Speech-to-text unavailable";
+      speechStatus.textContent = "This browser does not support the Web Speech API. Please paste or type text manually.";
+    }
+  </script>
+</body>
+</html>
